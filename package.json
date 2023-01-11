@@ -16,6 +16,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-busboy": "^9.0.0",
+    "express-fileupload": "^1.4.0",
     "express-formidable": "^1.2.0",
     "express-joi-validation": "^5.0.1",
     "express-validator": "^6.14.2",

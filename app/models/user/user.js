@@ -1,10 +1,9 @@
-import mongoose from "mongoose"
-import {generateUsername} from "unique-username-generator";
-import * as process from "process";
-import {generateToken} from "../http/helpers/helpers";
-
+const mongoose = require("mongoose")
+const {generateUsername} = require("unique-username-generator")
 const {Schema} = require('mongoose')
 const jwt = require('jsonwebtoken');
+const Roles = require('./role')
+const {generateToken} = require("../../http/helpers/helpers");
 
 const User = new Schema({
     user_name:{
@@ -38,9 +37,9 @@ const User = new Schema({
         default:null
     },
     role:{
-        type:String,
+        type:Schema.ObjectId,
+        ref: 'Roles',
         required:false,
-        default:'user'
     },
     password:{
         type:String,
@@ -56,6 +55,13 @@ const User = new Schema({
     },
 })
 
+User.pre('save', async function(next) {
+    if(!this.role){
+        const role = await Roles.findOne({value:'user'})
+        this.role=role['_id']
+    }
+    next()
+})
 User.methods.generateAuthToken = function () {
     const data = {
         _id: this._id,
@@ -69,6 +75,7 @@ User.methods.generateAuthToken = function () {
         token:generateToken(data),
         exp:today
     };
+
 };
 
 module.exports=mongoose.model('User',User)

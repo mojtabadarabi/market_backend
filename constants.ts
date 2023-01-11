@@ -10,3 +10,9 @@ export const corsOptions = {
         'Authentication'
     ]
 }
+export const ROLES = {
+    USER_ROLE:'user',
+    AUTHOR_ROLE:'author',
+    ADMIN_ROLE:'admin',
+    SUPER_ADMIN_ROLE:'super_admin'
+}

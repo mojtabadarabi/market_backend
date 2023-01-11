@@ -12,7 +12,7 @@ const Product = new Schema({
         required: true
     },
     images:{
-        type:[{type:String}],
+        type:[{type:Object}],
         required:false,
         default:[]
     } ,

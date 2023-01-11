@@ -1,7 +1,7 @@
 import {NextFunction, Response} from 'express';
 import {checkPassword, sendResponse} from "../../helpers/helpers";
 
-const User = require('../../../models/user')
+const User = require('../../../models/user/user')
 const _ = require('lodash')
 
 module.exports = new class ClientControlers {
@@ -30,6 +30,12 @@ module.exports = new class ClientControlers {
             ...req.user,
             profile: req?.file?.path && `http://localhost:${process.env.PORT}/${req?.file?.path}` || null
         }, {returnOriginal: false})
+        sendResponse(res, {
+            user: _.omit({...user}._doc, ['__v', 'password']),
+        }, 200, 'successfull')
+    }
+    async getUser(req: any, res: Response, next: NextFunction) {
+        const user = await User.findById(req.body.id).populate('role','-_id')
         sendResponse(res, {
             user: _.omit({...user}._doc, ['__v', 'password']),
         }, 200, 'successfull')

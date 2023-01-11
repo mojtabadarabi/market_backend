@@ -1,10 +1,8 @@
 import {body, check} from "express-validator";
 import {required} from "joi";
 import {uploadMulter} from "../../http/helpers/upload";
-
 const validationMiddleware = require('../../http/middlewares/validationMiddleware')
 const productsValidator = require('../../http/validator/products')
-
 const express = require('express')
 const productRouter = express.Router()
 const client = require('../../http/controlers/products/client')
@@ -17,23 +15,27 @@ productRouter.post(
     '/product',
     [productsValidator.getSingle],
     validationMiddleware,
-    client.getSingle)
+    client.getSingle
+)
 
 productRouter.post(
     '/create',
+    uploadMulter.array('images'),
     AuthMiddleware.validateRefreshToken,
+    AuthMiddleware.checkRole,
+    AuthMiddleware.checkAuthor,
     [productsValidator.create],
-    uploadMulter.single('images'),
     validationMiddleware,
-    admin.create)
-
+    admin.create
+)
 
 productRouter.post(
     '/update',
     AuthMiddleware.validateRefreshToken,
     [productsValidator.update],
     validationMiddleware,
-    admin.update)
+    admin.update
+)
 
 productRouter.post(
     '/delete',

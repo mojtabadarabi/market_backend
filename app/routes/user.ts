@@ -8,8 +8,31 @@ const validationMiddleware = require('../http/middlewares/validationMiddleware')
 const usersValidator = require('../http/validator/user')
 const multer = require('multer');
 
-userRouter.post('/register',uploadMulter.single('profile'),[usersValidator.register],validationMiddleware,user.register)
-userRouter.post('/login',[usersValidator.login],validationMiddleware,user.login)
-userRouter.post('/user',AuthMiddleware.validateRefreshToken,uploadMulter.single('profile'),[usersValidator.update],validationMiddleware,user.update)
+userRouter.post(
+    '/sync_app',
+    AuthMiddleware.validateRefreshToken,
+    user.getUser
+)
+userRouter.post(
+    '/register',
+    uploadMulter.single('profile'),
+    [usersValidator.register],
+    validationMiddleware,
+    user.register
+)
+userRouter.post(
+    '/login',
+    [usersValidator.login],
+    validationMiddleware,
+    user.login
+)
+userRouter.post(
+    '/update'
+    ,AuthMiddleware.validateRefreshToken,
+    uploadMulter.single('profile'),
+    [usersValidator.update],
+    validationMiddleware,
+    user.update
+)
 
 module.exports = userRouter

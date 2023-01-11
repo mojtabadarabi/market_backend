@@ -1,7 +1,7 @@
 import {body, check, oneOf} from "express-validator";
 import {hashPassword, renameObjectKEy, sendResponse} from "../helpers/helpers";
 
-const User = require('../../models/user')
+const User = require('../../models/user/user')
 const validator = require("validator");
 
 module.exports = {

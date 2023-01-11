@@ -7,11 +7,9 @@ const Product = require('../../../models/product/product')
 
 module.exports = new class adminControler {
     async create(req: any, res: Response) {
-        console.log(req)
-        console.log('req')
         const product = await Product.create({
             ...req.body,
-            images: req?.file?.path && `http://localhost:${process.env.PORT}/${req?.file?.path}` || null
+            images: req?.files|| null
         })
         await product.save()
         sendResponse(res, product, 200, 'successfully')

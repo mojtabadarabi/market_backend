@@ -10,9 +10,11 @@ const expressBusboy = require('express-busboy');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const jsonParser = bodyParser.json()
-const urlencodedParser = bodyParser.urlencoded({extended: true})
+const urlencodedParser = bodyParser.urlencoded({extended: false})
 require('dotenv').config()
 const routes = require('./routes')
+const multer = require('multer');
+const fileUpload = require('express-fileupload')
 
 class Application {
     constructor() {
@@ -22,25 +24,11 @@ class Application {
         this.setupRoutes()
         app.use(ErrorHandler)
     }
-
     setupMiddlewares() {
-        app.use(bodyParser.json())
-        app.use(urlencodedParser)
-        app.use((req: any,res:any,next:any) => {
-            console.log(req.body)
-            next()
-
-        })
-
-        expressBusboy.extend(app);
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: false }));
         app.use(cors(corsOptions))
-        app.use((req: any,res:any,next:any) => {
-            console.log(req.body)
-            next()
-
-        })
     }
-
     setupRoutes() {
         app.use('/api', routes)
         app.use('/uploads', express.static('./uploads'));
